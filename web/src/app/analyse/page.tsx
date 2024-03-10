@@ -1,16 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import ImageHistory from "./components/ImageHistory";
-import ContentPanel from "./components/ContentPanel";
+import ImageHistory from "./components/ImageHistory/ImageHistory";
+import ContentPanel from "./components/ContentPanel/ContentPanel";
 
 export default function AnalysePage() {
-  const [currentIndex, setCurrentIndex] = useState<number | null>(null);
-
   return (
     <div className="flex flex-row">
-      <ImageHistory currentIndex={currentIndex} />
-      <ContentPanel currentIndex={currentIndex} />
+      <ImageHistory />
+      <ContentPanel />
     </div>
   );
 }

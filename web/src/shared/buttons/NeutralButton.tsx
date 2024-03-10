@@ -1,14 +1,14 @@
 import React from "react";
-import Button from "./Button";
+import Button, { ButtonProps } from "./Button";
 
-export default function PrimaryButton({
+export default function NeutralButton({
   className,
   children,
   ...props
-}: JSX.IntrinsicElements["button"]) {
+}: ButtonProps) {
   return (
     <Button
-      className={`border-primary border-2 bg-primary bg-opacity-50 text-black ${
+      className={`border-gray-500 border-2 bg-gray-500 bg-opacity-50 text-black ${
         className ? className : ""
       }`}
       {...props}

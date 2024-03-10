@@ -1,5 +1,5 @@
-import Modal, { ModalProps } from "@/shared/Modal";
-import PrimaryButton from "@/shared/PrimaryButton";
+import Modal, { ModalProps } from "@/shared/containers/Modal";
+import PrimaryButton from "@/shared/buttons/PrimaryButton";
 import React from "react";
 import Image from "next/image";
 

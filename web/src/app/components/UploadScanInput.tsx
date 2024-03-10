@@ -1,30 +1,49 @@
 "use client";
 
-import PrimaryButton from "@/shared/PrimaryButton";
-import React, { useRef, useState } from "react";
+import PrimaryButton from "@/shared/buttons/PrimaryButton";
+import React, { useEffect, useRef, useState } from "react";
 import UploadConfirmationModal from "./UploadConfirmationModal";
 import { useRouter } from "next/navigation";
-import {
-  ImageHistoryItem,
-  ImageHistoryItemType,
-  useImageHistory,
-} from "@/hooks/useImageHistory";
 import AnalysePage from "../analyse/page";
+import { useImageHistoryStore } from "@/state/ImageHistory/store";
+import {
+  ImageHistoryDataItem,
+  ImageHistoryDataItemStage,
+} from "@/state/ImageHistory/types";
+
+type FileState = {
+  file: File | undefined;
+  fileUrl: string | undefined;
+};
 
 export default function UploadScanInput() {
   const [showModal, setShowModal] = useState(false);
-  const [fileState, setFileState] = useState<{
-    file: File | undefined;
-    fileUrl: string | undefined;
-  }>({
+  const [fileState, setFileState] = useState<FileState>({
     file: undefined,
     fileUrl: undefined,
   });
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const [imageHistory, setImageHistory] = useImageHistory();
+  const addImageHistoryItem = useImageHistoryStore(
+    (state) => state.addImageHistoryItem
+  );
+  const setCurrentIndex = useImageHistoryStore(
+    (state) => state.setCurrentIndex
+  );
 
   const onUploadClicked = () => inputRef.current?.click();
+
+  const addImageToHistory = (fileState: FileState) => {
+    if (fileState.file && fileState.fileUrl) {
+      const newHistoryItem: ImageHistoryDataItem = {
+        file: fileState.file,
+        fileUrl: fileState.fileUrl,
+        stage: ImageHistoryDataItemStage.ORIGINAL,
+      };
+      addImageHistoryItem(newHistoryItem);
+      setCurrentIndex(0);
+    }
+  };
 
   const onFileInputChanged = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -65,17 +84,6 @@ export default function UploadScanInput() {
     setFileState(newFileState);
   };
 
-  const addImageToHistory = () => {
-    if (fileState.file && fileState.fileUrl) {
-      const newHistoryItem: ImageHistoryItem = {
-        file: fileState.file,
-        fileUrl: fileState.fileUrl,
-        type: ImageHistoryItemType.ORIGINAL,
-      };
-      setImageHistory([...imageHistory, newHistoryItem]);
-    }
-  };
-
   return (
     <div className="flex flex-col gap-5">
       <h1>Upload an MRI Scan in RGB format</h1>
@@ -93,7 +101,7 @@ export default function UploadScanInput() {
             });
           }}
           onContinueClicked={() => {
-            addImageToHistory();
+            addImageToHistory(fileState);
             router.push(AnalysePage.route);
           }}
           onReUploadClicked={() => inputRef.current?.click()}

@@ -1,9 +1,9 @@
-import UploadScan from "./components/UploadScan";
+import UploadScanInput from "./components/UploadScanInput";
 
 export default function Home() {
   return (
     <main>
-      <UploadScan />
+      <UploadScanInput />
     </main>
   );
 }

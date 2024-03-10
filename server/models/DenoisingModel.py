@@ -44,7 +44,10 @@ class DenoisingModel:
         img_batch = np.expand_dims(img_array, 0)
         
         # Rescale
-        img_batch = img_batch.astype(np.float64) / INPUT_IMAGE_RESCALE
+        print(f"[MODEL] Min Max before rescaling: {np.min(img_batch)}, {np.max(img_batch)}")
+        img_batch = img_batch.astype(np.float32) / INPUT_IMAGE_RESCALE
+        print(f"[MODEL] Min Max after rescaling: {np.min(img_batch)}, {np.max(img_batch)}")
+
         print(f"[MODEL] Image array batch: {img_batch.shape}")
 
         prediction_batch = self.model.predict(img_batch)        
@@ -53,11 +56,15 @@ class DenoisingModel:
         prediction = prediction_batch[0]
         print(f"[MODEL] Prediction: {prediction.shape}")
 
-        # Scale image back up
-        prediction *= INPUT_IMAGE_RESCALE
+        print(f"[MODEL] Min Max before rescaling: {np.min(prediction)}, {np.max(prediction)}")
+
+        # Postprocess
+        prediction = rescale_and_correct_denoising_prediction(prediction, correction_amount=0.2)
+        
+        print(f"[MODEL] Min Max after rescaling: {np.min(prediction)}, {np.max(prediction)}")
 
         # Convert to PIL Image
-        prediction = Image.fromarray(np.uint8(prediction))
+        prediction = Image.fromarray(prediction)
 
         # Save overlay image to bytearray
         bytearray = pil_image_to_bytearray(prediction)

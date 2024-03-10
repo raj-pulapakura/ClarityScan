@@ -30,6 +30,30 @@ def get_overlay(binary_mask: np.ndarray, color_mask: np.ndarray, img_array: np.n
     return overlay
 
 
+def rescale_and_correct_denoising_prediction(pred: np.ndarray, correction_amount=0.15):
+    """
+    Problem:
+    The distribution of denoising model prediction (Y_hat) tend to be slightly shifted toward the right, compared to the ground truth (Y)
+    This has the effect of making the image slightly brighter, which is especially noticeable in the background as black becomes gray.
+    
+    Solution:
+    To fix this, we do the following steps:
+    - Scale Y_hat to range [0, 1] using min-max scaling 
+    - Shift Y_hat to the left by some correction_amount, by subtracting this correction_amount from Y_hat.
+    - This will probably incur some negative pixel values, so we clip the pixels to the range (0, 1).
+    - Then, we rescale up by 255.0
+    - Finally, we convert to uint8
+
+    correction_amount: float
+        - Should be approx. in the range [0, 1]
+    """
+    pred = (pred - np.min(pred)) / (np.max(pred) - np.min(pred))
+    pred -= correction_amount
+    pred = np.clip(pred, 0.0, 1.0)
+    pred *= 255.0
+    pred = np.uint8(pred)
+    return pred
+
 def pil_image_to_bytearray(array: Image.Image):
     import io
 

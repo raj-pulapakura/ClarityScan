@@ -74,10 +74,16 @@ class TumorSegmentationModel:
         overlay = get_overlay(binary_mask, green_mask, img_array)
         print(f"[MODEL] Overlay: {overlay.shape}")
 
-        # Convert to PIL Image
+        # Convert overlay to PIL Image
         overlay = Image.fromarray(np.uint8(overlay))
 
         # Save overlay image to bytes
-        bytes = array_to_bytes(overlay)
+        overlay_bytearray = pil_image_to_bytearray(overlay)
 
-        return bytes
+        # Convert mask to PIL Image
+        green_mask = Image.fromarray(np.uint8(green_mask))
+
+        # Save mask to bytes
+        green_mask_bytearray = pil_image_to_bytearray(green_mask)
+
+        return overlay_bytearray, green_mask_bytearray

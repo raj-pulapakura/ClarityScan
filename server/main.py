@@ -1,11 +1,13 @@
 from modal import web_endpoint, CloudBucketMount, Secret, gpu
 from fastapi import UploadFile, Response
+from fastapi.responses import StreamingResponse
 
 from setup import stub, image
 from config.model import *
 from config.container import *
 from models.TumorSegmentationModel import TumorSegmentationModel
 from models.DenoisingModel import DenoisingModel
+from processing.postprocessing import zip_list_of_bytearrays
 
 
 @stub.function(
@@ -26,11 +28,17 @@ def run_segmentation_model(file: UploadFile):
 
         print(f"[INFO] Tensorflow version: {tf.__version__}")
 
-        prediction_bytes = TumorSegmentationModel().inference.remote(file)
+        overlay_bytes, green_mask_bytes = TumorSegmentationModel().inference.remote(file)
 
-        return Response(content=prediction_bytes, media_type="image/png")
+        print(f"[INFO] Zipping overlay and mask into one file")
+        prediction_zip = zip_list_of_bytearrays([overlay_bytes, green_mask_bytes], ["overlay.png", "mask.png"])
+
+        return StreamingResponse(content=prediction_zip, media_type="application/x-zip-compressed",
+                             headers={"Content-Disposition": "attachment; filename=prediction.zip"})
 
     except Exception as e:
+        print("[ERROR]")
+        print(e)
         return {
             "status": 500,
             "message": e
@@ -57,7 +65,11 @@ def run_denoiser_model(file: UploadFile):
 
         prediction_bytes = DenoisingModel().inference.remote(file)
 
-        return Response(content=prediction_bytes, media_type="image/png")
+        print(f"[INFO] Zipping overlay and mask into one file")
+        prediction_zip = zip_list_of_bytearrays([prediction_bytes], ["denoised.png"])
+
+        return StreamingResponse(content=prediction_zip, media_type="application/x-zip-compressed",
+                             headers={"Content-Disposition": "attachment; filename=prediction.zip"})
 
     except Exception as e:
         return {

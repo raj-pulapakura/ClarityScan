@@ -59,7 +59,7 @@ class DenoisingModel:
         # Convert to PIL Image
         prediction = Image.fromarray(np.uint8(prediction))
 
-        # Save overlay image to bytes
-        bytes = array_to_bytes(prediction)
+        # Save overlay image to bytearray
+        bytearray = pil_image_to_bytearray(prediction)
 
-        return bytes
+        return bytearray

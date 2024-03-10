@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import ImageHistory from "./components/ImageHistory/ImageHistory";
-import ContentPanel from "./components/ContentPanel/ContentPanel";
+import ContentPanel from "./components/ContentPanel/ContentView";
 
 export default function AnalysePage() {
   return (

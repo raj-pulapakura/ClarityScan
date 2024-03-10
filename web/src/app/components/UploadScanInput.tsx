@@ -6,11 +6,10 @@ import UploadConfirmationModal from "./UploadConfirmationModal";
 import { useRouter } from "next/navigation";
 import AnalysePage from "../analyse/page";
 import { useImageHistoryStore } from "@/state/ImageHistory/store";
-import {
-  ImageHistoryDataItem,
-  ImageHistoryDataItemStage,
-} from "@/state/ImageHistory/types";
-import { createUploadedDataItem } from "@/state/ImageHistory/creators";
+import { ImageDataItem } from "@/state/types";
+import { v4 } from "uuid";
+import { useNoiseRemovalInputsState } from "@/state/NoiseRemovalInputs/store";
+import { useTumorDetectionInputsState } from "@/state/TumorDetectionInputs/store";
 
 type FileState = {
   file: File | undefined;
@@ -28,20 +27,26 @@ export default function UploadScanInput() {
   const addImageHistoryItem = useImageHistoryStore(
     (state) => state.addImageHistoryItem
   );
-  const setCurrentIndex = useImageHistoryStore(
-    (state) => state.setCurrentIndex
+  const addNoiseRemovalInput = useNoiseRemovalInputsState(
+    (state) => state.addNoiseRemovalInput
+  );
+  const addTumorDetectionInput = useTumorDetectionInputsState(
+    (state) => state.addTumorDetectionInput
   );
 
   const onUploadClicked = () => inputRef.current?.click();
 
   const addImageToHistory = (fileState: FileState) => {
     if (fileState.file && fileState.fileUrl) {
-      const uploadedDataItem = createUploadedDataItem(
-        fileState.file,
-        fileState.fileUrl
-      );
+      const uploadedDataItem: ImageDataItem = {
+        id: v4(),
+        file: fileState.file,
+        fileUrl: fileState.fileUrl,
+        description: "Uploaded Image",
+      };
       addImageHistoryItem(uploadedDataItem);
-      setCurrentIndex(0);
+      addNoiseRemovalInput(uploadedDataItem);
+      addTumorDetectionInput(uploadedDataItem);
     }
   };
 

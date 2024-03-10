@@ -14,10 +14,7 @@ export default function ImageHistoryList() {
   return (
     <div className="flex flex-col gap-3">
       {imageHistory.map((item, index) => (
-        <ImageHistoryItem
-          isSelected={index === currentIndex}
-          imageHistoryItem={item}
-        />
+        <ImageHistoryItem index={index} imageHistoryItem={item} />
       ))}
     </div>
   );

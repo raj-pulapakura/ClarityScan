@@ -10,6 +10,7 @@ import {
   ImageHistoryDataItem,
   ImageHistoryDataItemStage,
 } from "@/state/ImageHistory/types";
+import { createUploadedDataItem } from "@/state/ImageHistory/creators";
 
 type FileState = {
   file: File | undefined;
@@ -35,12 +36,11 @@ export default function UploadScanInput() {
 
   const addImageToHistory = (fileState: FileState) => {
     if (fileState.file && fileState.fileUrl) {
-      const newHistoryItem: ImageHistoryDataItem = {
-        file: fileState.file,
-        fileUrl: fileState.fileUrl,
-        stage: ImageHistoryDataItemStage.ORIGINAL,
-      };
-      addImageHistoryItem(newHistoryItem);
+      const uploadedDataItem = createUploadedDataItem(
+        fileState.file,
+        fileState.fileUrl
+      );
+      addImageHistoryItem(uploadedDataItem);
       setCurrentIndex(0);
     }
   };

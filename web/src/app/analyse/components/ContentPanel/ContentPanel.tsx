@@ -2,7 +2,10 @@
 
 import React from "react";
 import { useImageHistoryStore } from "@/state/ImageHistory/store";
-import { ImageHistoryDataItemStage } from "@/state/ImageHistory/types";
+import {
+  ImageHistoryDataItemStage,
+  UploadedDataItem,
+} from "@/state/ImageHistory/types";
 import NoiseRemovalAction from "./contents/NoiseRemovalAction";
 import TumorIdentificationAction from "./contents/TumorIdentificationAction";
 import TumorSegmentationView from "./contents/TumorSegmentationView";
@@ -21,10 +24,12 @@ export default function ContentPanel() {
   let content;
 
   switch (currentImageItem.stage) {
-    case ImageHistoryDataItemStage.ORIGINAL:
+    case ImageHistoryDataItemStage.UPLOADED:
       content = (
         <>
-          <NoiseRemovalAction />
+          <NoiseRemovalAction
+            uploadedDataItem={currentImageItem as UploadedDataItem}
+          />
           <TumorIdentificationAction />
         </>
       );
@@ -32,7 +37,10 @@ export default function ContentPanel() {
     case ImageHistoryDataItemStage.NOISE_REMOVED:
       content = <TumorIdentificationAction />;
       break;
-    case ImageHistoryDataItemStage.TUMOR_DETECTED:
+    case ImageHistoryDataItemStage.TUMOR_DETECTED_FROM_ORIGINAL:
+      content = <TumorSegmentationView />;
+      break;
+    case ImageHistoryDataItemStage.TUMOR_DETECTED_FROM_NOISE_REMOVED:
       content = <TumorSegmentationView />;
       break;
   }

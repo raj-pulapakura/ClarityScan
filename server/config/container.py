@@ -1,0 +1,2 @@
+AWS_SECRET_NAME = "my-aws-secret"
+CONTAINER_IDLE_TIMEOUT = 240

@@ -20,6 +20,7 @@ from processing.postprocessing import zip_list_of_bytearrays
             secret=Secret.from_name(AWS_SECRET_NAME),
         )
     },
+    timeout=CONTAINER_EXECUTION_TIMEOUT
 )
 @web_endpoint(method="POST")
 def run_segmentation_model(file: UploadFile):
@@ -55,6 +56,7 @@ def run_segmentation_model(file: UploadFile):
             secret=Secret.from_name(AWS_SECRET_NAME),
         )
     },
+    timeout=CONTAINER_EXECUTION_TIMEOUT
 )
 @web_endpoint(method="POST")
 def run_denoiser_model(file: UploadFile):

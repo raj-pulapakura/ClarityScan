@@ -38,10 +38,19 @@ export default function NoiseRemovalAction() {
       "file",
       new Blob([modelInputFile], { type: modelInputFile.type })
     );
-    const response = await fetch("/api/denoisingModelService", {
-      method: "POST",
-      body: formData,
-    });
+    let response;
+    try {
+      response = await fetch("/api/denoisingModelService", {
+        method: "POST",
+        body: formData,
+      });
+    } catch {
+      console.log("error, retrying");
+      response = await fetch("/api/denoisingModelService", {
+        method: "POST",
+        body: formData,
+      });
+    }
     const zipBlob = await response.blob();
     const predictionFiles = await extractFilesFromZipBlob(zipBlob);
     const denoisedImage = predictionFiles[0];

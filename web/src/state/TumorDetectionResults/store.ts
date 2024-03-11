@@ -8,6 +8,7 @@ interface TumorDetectionResultsState {
   setInputDataItem: (inputDataItem: ImageDataItem) => void;
   setTumorMaskDataItem: (tumorMaskDataItem: ImageDataItem) => void;
   setTumorOverlaykDataItem: (tumorOverlayDataItem: ImageDataItem) => void;
+  clear: () => void;
 }
 
 export const useTumorDetectionResultsStore =
@@ -29,5 +30,11 @@ export const useTumorDetectionResultsStore =
       set((state) => ({
         ...state,
         tumorOverlayDataItem,
+      })),
+    clear: () =>
+      set(() => ({
+        inputDataItem: null,
+        tumorMaskDataItem: null,
+        tumorOverlayDataItem: null,
       })),
   }));

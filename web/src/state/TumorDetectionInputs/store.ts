@@ -6,6 +6,7 @@ interface TumorDetectionInputsState {
   currentIndex: number;
   addTumorDetectionInput: (tumorDetectionInput: ImageDataItem) => void;
   setCurrentIndex: (newIndex: number) => void;
+  clear: () => void;
 }
 
 export const useTumorDetectionInputsState = create<TumorDetectionInputsState>()(
@@ -22,5 +23,7 @@ export const useTumorDetectionInputsState = create<TumorDetectionInputsState>()(
       })),
     setCurrentIndex: (newIndex) =>
       set((state) => ({ ...state, currentIndex: newIndex })),
+    clear: () =>
+      set((state) => ({ ...state, tumorDetectionInputs: [], currentIndex: 0 })),
   })
 );

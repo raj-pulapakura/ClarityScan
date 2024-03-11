@@ -8,6 +8,7 @@ import { ImageDataItem } from "@/state/types";
 import { v4 } from "uuid";
 import { useImageHistoryStore } from "@/state/ImageHistory/store";
 import { extractFilesFromZipBlob } from "@/dataFetching/extractFilesFromZipBlob";
+import NoImagesToShow from "../../NoImagesToShow";
 
 export default function IdentifyTumorPanel() {
   const tumorDetectionInputs = useTumorDetectionInputsState(
@@ -51,6 +52,8 @@ export default function IdentifyTumorPanel() {
   };
 
   const onIdentifyButtonClicked = async () => {
+    if (!tumorDetectionInputs.length) return;
+
     setLoading(true);
     const modelInputFile = tumorDetectionInputs[currentIndex];
     const [overlayImage, maskImage] = await getTumorDetectionResults();
@@ -88,25 +91,35 @@ export default function IdentifyTumorPanel() {
 
   return (
     <Panel title="Tumor Identification">
-      <div className="flex flex-row">
-        <div className="flex flex-col">
+      <div className="flex flex-row justify-between mt-6">
+        <div className="flex flex-col w-1/3 gap-10">
           <p>
             Our ML model will attempt to identify if there is a lower-grade
             glioma in the given scan.
           </p>
-          <PrimaryButton onClick={onIdentifyButtonClicked}>
-            {loading && "Loading"} Identify Tumor
+          <PrimaryButton
+            disabled={!tumorDetectionInputs.length}
+            onClick={onIdentifyButtonClicked}
+            loading={loading}
+          >
+            Identify Tumor
           </PrimaryButton>
         </div>
-        <div className="flex flex-row">
-          {tumorDetectionInputs.map((dataItem, index) => (
-            <ImageItem
-              selected={currentIndex === index}
-              onClick={() => setCurrentIndex(index)}
-              imageDataItem={dataItem}
-            />
-          ))}
-        </div>
+        {tumorDetectionInputs.length ? (
+          <div className="flex flex-row gap-5">
+            {tumorDetectionInputs.map((dataItem, index) => (
+              <ImageItem
+                key={dataItem.id}
+                selected={currentIndex === index}
+                onClick={() => setCurrentIndex(index)}
+                imageDataItem={dataItem}
+                className="hover:cursor-pointer"
+              />
+            ))}
+          </div>
+        ) : (
+          <NoImagesToShow />
+        )}
       </div>
     </Panel>
   );

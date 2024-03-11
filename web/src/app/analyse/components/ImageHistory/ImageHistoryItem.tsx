@@ -10,9 +10,9 @@ export default function ImageHistoryItem({
   imageHistoryItem: item,
 }: ImageHistoryItemProps) {
   return (
-    <div className={`border-2 border-black flex flex-row gap-2`}>
-      <img className="w-1/2" src={item.fileUrl} />
-      <h1>{item.description}</h1>
+    <div className={`w-full flex flex-col items-center rounded-lg`}>
+      <h1 className="py-3 font-semibold">{item.description}</h1>
+      <img className="w-full" src={item.fileUrl} />
     </div>
   );
 }

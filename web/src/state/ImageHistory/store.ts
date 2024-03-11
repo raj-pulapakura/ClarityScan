@@ -4,6 +4,7 @@ import { ImageDataItem, ImageDataItemList } from "../types";
 interface ImageHistoryState {
   imageHistory: ImageDataItemList;
   addImageHistoryItem: (imageHistoryItem: ImageDataItem) => void;
+  clear: () => void;
 }
 
 export const useImageHistoryStore = create<ImageHistoryState>()((set) => ({
@@ -13,4 +14,5 @@ export const useImageHistoryStore = create<ImageHistoryState>()((set) => ({
       ...state,
       imageHistory: [imageHistoryItem, ...state.imageHistory],
     })),
+  clear: () => set((state) => ({ ...state, imageHistory: [] })),
 }));

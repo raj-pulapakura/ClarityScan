@@ -8,6 +8,7 @@ import { ImageDataItem } from "@/state/types";
 import { v4 } from "uuid";
 import ImageItem from "../ImageItem";
 import { extractFilesFromZipBlob } from "@/dataFetching/extractFilesFromZipBlob";
+import NoImagesToShow from "../../NoImagesToShow";
 
 export default function NoiseRemovalAction() {
   const noiseRemovalInputs = useNoiseRemovalInputsState(
@@ -45,6 +46,8 @@ export default function NoiseRemovalAction() {
   };
 
   const onRemovedNoiseButtonClicked = async () => {
+    if (!noiseRemovalInputs.length) return;
+
     setLoading(true);
     const denoisedImageFile = await getDenoisedImageFile();
     const newItem: ImageDataItem = {
@@ -60,26 +63,35 @@ export default function NoiseRemovalAction() {
 
   return (
     <Panel title="Noise Removal">
-      <div className="flex flex-row">
-        <div className="flex flex-col">
+      <div className="flex flex-row justify-between mt-6">
+        <div className="flex flex-col w-1/3 gap-10">
           <p>
             Before identifying the tumor, it may be helpful to remove any noise
             which is present in the scan.
           </p>
-          <PrimaryButton onClick={onRemovedNoiseButtonClicked}>
-            {loading && "Loading..."}
+          <PrimaryButton
+            disabled={!noiseRemovalInputs.length}
+            onClick={onRemovedNoiseButtonClicked}
+            loading={loading}
+          >
             Remove Noise
           </PrimaryButton>
         </div>
-        <div className="flex flex-row">
-          {noiseRemovalInputs.map((dataItem, index) => (
-            <ImageItem
-              selected={currentIndex === index}
-              onClick={() => setCurrentIndex(index)}
-              imageDataItem={dataItem}
-            />
-          ))}
-        </div>
+        {noiseRemovalInputs.length ? (
+          <div className="flex flex-row gap-5">
+            {noiseRemovalInputs.map((dataItem, index) => (
+              <ImageItem
+                key={dataItem.id}
+                selected={currentIndex === index}
+                onClick={() => setCurrentIndex(index)}
+                imageDataItem={dataItem}
+                className="hover:cursor-pointer"
+              />
+            ))}
+          </div>
+        ) : (
+          <NoImagesToShow />
+        )}
       </div>
     </Panel>
   );

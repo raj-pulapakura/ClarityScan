@@ -6,6 +6,7 @@ interface NoiseRemovalInputsState {
   currentIndex: number;
   addNoiseRemovalInput: (noiseRemovalInput: ImageDataItem) => void;
   setCurrentIndex: (newIndex: number) => void;
+  clear: () => void;
 }
 
 export const useNoiseRemovalInputsState = create<NoiseRemovalInputsState>()(
@@ -19,5 +20,7 @@ export const useNoiseRemovalInputsState = create<NoiseRemovalInputsState>()(
       })),
     setCurrentIndex: (newIndex) =>
       set((state) => ({ ...state, currentIndex: newIndex })),
+    clear: () =>
+      set((state) => ({ ...state, noiseRemovalInputs: [], currentIndex: 0 })),
   })
 );

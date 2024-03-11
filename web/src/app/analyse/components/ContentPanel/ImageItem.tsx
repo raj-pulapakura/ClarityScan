@@ -15,8 +15,11 @@ export default function ImageItem({
     : "border-black border-2";
 
   return (
-    <div className={`flex flex-col ${borderStyle} ${className}`} {...props}>
-      <h1>{imageDataItem.description}</h1>
+    <div
+      className={`flex flex-col items-center rounded-lg ${borderStyle} ${className}`}
+      {...props}
+    >
+      <h1 className="p-5 font-semibold">{imageDataItem.description}</h1>
       <img src={imageDataItem.fileUrl} />
     </div>
   );

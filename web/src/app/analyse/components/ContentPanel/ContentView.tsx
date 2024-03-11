@@ -5,9 +5,12 @@ import NoiseRemovalAction from "./panels/NoiseRemovalPanel";
 import IdentifyTumorPanel from "./panels/IdentifyTumorPanel";
 import DetectionResultsPanel from "./panels/DetectionResultsPanel";
 
-export default function ContentPanel() {
+export default function ContentView({
+  className,
+  ...props
+}: JSX.IntrinsicElements["div"]) {
   return (
-    <div className="flex flex-col gap-5">
+    <div className={`flex flex-col gap-10 w-full ${className}`}>
       <NoiseRemovalAction />
       <IdentifyTumorPanel />
       <DetectionResultsPanel />

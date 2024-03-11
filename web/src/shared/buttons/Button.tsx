@@ -1,4 +1,5 @@
 import React from "react";
+import { Circles, DNA, MutatingDots, Grid } from "react-loader-spinner";
 
 export type ButtonProps = JSX.IntrinsicElements["button"] & {
   loading?: boolean;
@@ -8,19 +9,16 @@ export default function Button({
   loading = false,
   className,
   children,
-  disabled,
   ...props
 }: ButtonProps) {
   return (
     <button
-      className={`p-3 rounded-xl ${
-        disabled
-          ? "bg-gray-300 bg-opacity-20 border-2 border-gray-300 text-gray-500 hover:cursor-auto"
-          : ""
-      } ${className ? className : ""}`}
+      className={`p-3 rounded-xl flex items-center gap-5 justify-center ${
+        className ? className : ""
+      }`}
       {...props}
     >
-      {loading && "Loading..."}
+      {loading && <Grid width={20} height={20} color="black" />}
       {children}
     </button>
   );

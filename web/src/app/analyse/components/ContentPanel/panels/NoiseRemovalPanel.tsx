@@ -39,12 +39,11 @@ export default function NoiseRemovalAction() {
       new Blob([modelInputFile], { type: modelInputFile.type })
     );
     let response;
-    try {
-      response = await fetch("/api/denoisingModelService", {
-        method: "POST",
-        body: formData,
-      });
-    } catch {
+    response = await fetch("/api/denoisingModelService", {
+      method: "POST",
+      body: formData,
+    });
+    if (response.status == 504) {
       console.log("error, retrying");
       response = await fetch("/api/denoisingModelService", {
         method: "POST",

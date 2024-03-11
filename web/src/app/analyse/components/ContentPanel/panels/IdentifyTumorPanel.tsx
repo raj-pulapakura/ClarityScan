@@ -1,14 +1,17 @@
 import PrimaryButton from "@/shared/buttons/PrimaryButton";
 import React, { useState } from "react";
-import Panel from "./Panel";
+import Panel from "../containers/Panel";
 import { useTumorDetectionInputsState } from "@/state/TumorDetectionInputs/store";
-import ImageItem from "../ImageItem";
+import ImageItem from "../../containers/ImageItem";
 import { useTumorDetectionResultsStore } from "@/state/TumorDetectionResults/store";
 import { ImageDataItem } from "@/state/types";
 import { v4 } from "uuid";
 import { useImageHistoryStore } from "@/state/ImageHistory/store";
 import { extractFilesFromZipBlob } from "@/dataFetching/extractFilesFromZipBlob";
-import NoImagesToShow from "../../NoImagesToShow";
+import NoImagesToShow from "../../containers/NoImagesToShow";
+import AvailableImagesHeadline from "../../containers/AvailableImagesHeadline";
+import PanelInnerContainer from "../containers/PanelInnerContainer";
+import PanelActionContainer from "../containers/PanelActionContainer";
 
 export default function IdentifyTumorPanel() {
   const tumorDetectionInputs = useTumorDetectionInputsState(
@@ -90,10 +93,10 @@ export default function IdentifyTumorPanel() {
   };
 
   return (
-    <Panel title="Tumor Identification">
-      <div className="flex flex-row justify-between mt-6">
-        <div className="flex flex-col w-1/3 gap-10">
-          <p>
+    <Panel title="Tumor Identification" loading={loading}>
+      <PanelInnerContainer>
+        <PanelActionContainer>
+          <p className="text-md">
             Our ML model will attempt to identify if there is a lower-grade
             glioma in the given scan.
           </p>
@@ -104,23 +107,26 @@ export default function IdentifyTumorPanel() {
           >
             Identify Tumor
           </PrimaryButton>
-        </div>
+        </PanelActionContainer>
         {tumorDetectionInputs.length ? (
-          <div className="flex flex-row gap-5">
-            {tumorDetectionInputs.map((dataItem, index) => (
-              <ImageItem
-                key={dataItem.id}
-                selected={currentIndex === index}
-                onClick={() => setCurrentIndex(index)}
-                imageDataItem={dataItem}
-                className="hover:cursor-pointer"
-              />
-            ))}
+          <div className="flex flex-col w-3/4">
+            <AvailableImagesHeadline />
+            <div className="grid grid-cols-2 gap-5 mt-4">
+              {tumorDetectionInputs.map((dataItem, index) => (
+                <ImageItem
+                  key={dataItem.id}
+                  selected={currentIndex === index}
+                  onClick={() => setCurrentIndex(index)}
+                  imageDataItem={dataItem}
+                  className="hover:cursor-pointer"
+                />
+              ))}
+            </div>
           </div>
         ) : (
           <NoImagesToShow />
         )}
-      </div>
+      </PanelInnerContainer>
     </Panel>
   );
 }

@@ -10,7 +10,7 @@ export default function ContentView({
   ...props
 }: JSX.IntrinsicElements["div"]) {
   return (
-    <div className={`flex flex-col gap-10 w-full ${className}`}>
+    <div className={`flex flex-col gap-12 w-full ${className}`}>
       <NoiseRemovalAction />
       <IdentifyTumorPanel />
       <DetectionResultsPanel />

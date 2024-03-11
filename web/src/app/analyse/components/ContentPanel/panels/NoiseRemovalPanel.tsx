@@ -1,14 +1,17 @@
 import PrimaryButton from "@/shared/buttons/PrimaryButton";
 import React, { useEffect, useState } from "react";
-import Panel from "./Panel";
+import Panel from "../containers/Panel";
 import { useNoiseRemovalInputsState } from "@/state/NoiseRemovalInputs/store";
 import { useImageHistoryStore } from "@/state/ImageHistory/store";
 import { useTumorDetectionInputsState } from "@/state/TumorDetectionInputs/store";
 import { ImageDataItem } from "@/state/types";
 import { v4 } from "uuid";
-import ImageItem from "../ImageItem";
+import ImageItem from "../../containers/ImageItem";
 import { extractFilesFromZipBlob } from "@/dataFetching/extractFilesFromZipBlob";
-import NoImagesToShow from "../../NoImagesToShow";
+import NoImagesToShow from "../../containers/NoImagesToShow";
+import AvailableImagesHeadline from "../../containers/AvailableImagesHeadline";
+import PanelInnerContainer from "../containers/PanelInnerContainer";
+import PanelActionContainer from "../containers/PanelActionContainer";
 
 export default function NoiseRemovalAction() {
   const noiseRemovalInputs = useNoiseRemovalInputsState(
@@ -62,12 +65,12 @@ export default function NoiseRemovalAction() {
   };
 
   return (
-    <Panel title="Noise Removal">
-      <div className="flex flex-row justify-between mt-6">
-        <div className="flex flex-col w-1/3 gap-10">
-          <p>
-            Before identifying the tumor, it may be helpful to remove any noise
-            which is present in the scan.
+    <Panel title="Noise Removal" loading={loading}>
+      <PanelInnerContainer>
+        <PanelActionContainer>
+          <p className="text-md">
+            Remove noise from your MRI Scans to enhance their quality. This can
+            potentially increase the accuracy of the glioma segmentation.
           </p>
           <PrimaryButton
             disabled={!noiseRemovalInputs.length}
@@ -76,23 +79,26 @@ export default function NoiseRemovalAction() {
           >
             Remove Noise
           </PrimaryButton>
-        </div>
+        </PanelActionContainer>
         {noiseRemovalInputs.length ? (
-          <div className="flex flex-row gap-5">
-            {noiseRemovalInputs.map((dataItem, index) => (
-              <ImageItem
-                key={dataItem.id}
-                selected={currentIndex === index}
-                onClick={() => setCurrentIndex(index)}
-                imageDataItem={dataItem}
-                className="hover:cursor-pointer"
-              />
-            ))}
+          <div className="flex flex-col w-3/4">
+            <AvailableImagesHeadline />
+            <div className="grid grid-cols-2 gap-5 mt-4">
+              {noiseRemovalInputs.map((dataItem, index) => (
+                <ImageItem
+                  key={dataItem.id}
+                  selected={currentIndex === index}
+                  onClick={() => setCurrentIndex(index)}
+                  imageDataItem={dataItem}
+                  className="hover:cursor-pointer"
+                />
+              ))}
+            </div>
           </div>
         ) : (
           <NoImagesToShow />
         )}
-      </div>
+      </PanelInnerContainer>
     </Panel>
   );
 }

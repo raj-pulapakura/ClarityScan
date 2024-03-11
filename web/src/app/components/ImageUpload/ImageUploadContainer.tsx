@@ -1,10 +1,10 @@
 "use client";
 
 import PrimaryButton from "@/shared/buttons/PrimaryButton";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import UploadConfirmationModal from "./UploadConfirmationModal";
 import { useRouter } from "next/navigation";
-import AnalysePage from "../analyse/page";
+import AnalysePage from "../../analyse/page";
 import { useImageHistoryStore } from "@/state/ImageHistory/store";
 import { ImageDataItem } from "@/state/types";
 import { v4 } from "uuid";
@@ -16,7 +16,7 @@ type FileState = {
   fileUrl: string | undefined;
 };
 
-export default function UploadScanInput() {
+export default function ImageUploadContainer() {
   const [showModal, setShowModal] = useState(false);
   const [fileState, setFileState] = useState<FileState>({
     file: undefined,
@@ -34,9 +34,9 @@ export default function UploadScanInput() {
     (state) => state.addTumorDetectionInput
   );
 
-  const onUploadClicked = () => inputRef.current?.click();
+  const onUploadButtonClicked = () => inputRef.current?.click();
 
-  const addImageToHistory = (fileState: FileState) => {
+  const registerImage = (fileState: FileState) => {
     if (fileState.file && fileState.fileUrl) {
       const uploadedDataItem: ImageDataItem = {
         id: v4(),
@@ -62,8 +62,6 @@ export default function UploadScanInput() {
       setFileState(newFileState);
       setShowModal(true);
       await convertImageToJpg(newFileState);
-    } else {
-      alert("Error uploading file. Please try again.");
     }
   };
 
@@ -89,35 +87,35 @@ export default function UploadScanInput() {
     setFileState(newFileState);
   };
 
+  const resetState = () => {
+    setShowModal(false);
+    setFileState({
+      file: undefined,
+      fileUrl: undefined,
+    });
+    // clear files from input
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 border-gray-500 bg-gray-400 bg-opacity-10  border-2 rounded-lg items-center p-7">
       <h1>Upload an MRI Scan in RGB format</h1>
-      <PrimaryButton className="w-fit" onClick={onUploadClicked}>
+      <PrimaryButton className="w-full" onClick={onUploadButtonClicked}>
         UPLOAD
       </PrimaryButton>
       <input ref={inputRef} type="file" onChange={onFileInputChanged} hidden />
       {showModal && fileState.file && fileState.fileUrl && (
         <UploadConfirmationModal
-          onCancelClicked={() => {
-            setShowModal(false);
-            setFileState({
-              file: undefined,
-              fileUrl: undefined,
-            });
-          }}
+          closeModal={resetState}
+          onCancelClicked={resetState}
           onContinueClicked={() => {
-            addImageToHistory(fileState);
+            registerImage(fileState);
             router.push(AnalysePage.route);
           }}
           onReUploadClicked={() => inputRef.current?.click()}
           imageUrl={fileState.fileUrl}
-          closeModal={() => {
-            setShowModal(false);
-            setFileState({
-              file: undefined,
-              fileUrl: undefined,
-            });
-          }}
         />
       )}
     </div>

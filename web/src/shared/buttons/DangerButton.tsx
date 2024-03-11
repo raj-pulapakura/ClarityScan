@@ -8,7 +8,7 @@ export default function DangerButton({
 }: ButtonProps) {
   return (
     <Button
-      className={`border-red-500 border-2 bg-red-500 bg-opacity-50 text-black ${
+      className={`border-red-400 border-2 bg-red-500 bg-opacity-30 text-black active:bg-opacity-40 ${
         className ? className : ""
       }`}
       {...props}

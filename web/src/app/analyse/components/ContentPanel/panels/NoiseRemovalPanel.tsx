@@ -7,6 +7,7 @@ import { useTumorDetectionInputsState } from "@/state/TumorDetectionInputs/store
 import { ImageDataItem } from "@/state/types";
 import { v4 } from "uuid";
 import ImageItem from "../ImageItem";
+import { extractFilesFromZipBlob } from "@/dataFetching/extractFilesFromZipBlob";
 
 export default function NoiseRemovalAction() {
   const noiseRemovalInputs = useNoiseRemovalInputsState(
@@ -24,17 +25,32 @@ export default function NoiseRemovalAction() {
   const addTumorDetectionInput = useTumorDetectionInputsState(
     (state) => state.addTumorDetectionInput
   );
-
-  useEffect(() => console.log(noiseRemovalInputs), [noiseRemovalInputs]);
-
   const [loading, setLoading] = useState(false);
 
-  const onRemovedNoiseButtonClicked = () => {
+  const getDenoisedImageFile = async () => {
+    const formData = new FormData();
+    const modelInputFile = noiseRemovalInputs[currentIndex].file;
+    formData.append(
+      "file",
+      new Blob([modelInputFile], { type: modelInputFile.type })
+    );
+    const response = await fetch("/api/denoisingModelService", {
+      method: "POST",
+      body: formData,
+    });
+    const zipBlob = await response.blob();
+    const predictionFiles = await extractFilesFromZipBlob(zipBlob);
+    const denoisedImage = predictionFiles[0];
+    return denoisedImage;
+  };
+
+  const onRemovedNoiseButtonClicked = async () => {
     setLoading(true);
+    const denoisedImageFile = await getDenoisedImageFile();
     const newItem: ImageDataItem = {
       id: v4(),
-      file: noiseRemovalInputs[0].file, // change later
-      fileUrl: noiseRemovalInputs[0].fileUrl, // change later
+      file: denoisedImageFile,
+      fileUrl: URL.createObjectURL(denoisedImageFile),
       description: "Noise Removed",
     };
     addImageHistoryItem(newItem);
@@ -51,6 +67,7 @@ export default function NoiseRemovalAction() {
             which is present in the scan.
           </p>
           <PrimaryButton onClick={onRemovedNoiseButtonClicked}>
+            {loading && "Loading..."}
             Remove Noise
           </PrimaryButton>
         </div>

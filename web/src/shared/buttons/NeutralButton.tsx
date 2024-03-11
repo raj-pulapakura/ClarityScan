@@ -8,7 +8,7 @@ export default function NeutralButton({
 }: ButtonProps) {
   return (
     <Button
-      className={`border-gray-500 border-2 bg-gray-500 bg-opacity-50 text-black ${
+      className={`border-gray-400 border-2 bg-gray-500 bg-opacity-30 text-black active:bg-opacity-40 ${
         className ? className : ""
       }`}
       {...props}

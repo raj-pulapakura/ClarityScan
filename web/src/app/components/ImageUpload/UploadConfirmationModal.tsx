@@ -2,6 +2,8 @@ import Modal, { ModalProps } from "@/shared/containers/Modal";
 import PrimaryButton from "@/shared/buttons/PrimaryButton";
 import React from "react";
 import Image from "next/image";
+import DangerButton from "@/shared/buttons/DangerButton";
+import NeutralButton from "@/shared/buttons/NeutralButton";
 
 export type ConfirmationModalProps = ModalProps & {
   imageUrl: string;
@@ -18,32 +20,31 @@ export default function UploadConfirmationModal({
   ...props
 }: ConfirmationModalProps) {
   return (
-    <Modal {...props}>
-      <div className="flex">
+    <Modal className="rounded-lg" {...props}>
+      <div className="flex gap-10 flex-col">
         <div>
-          <Image src={imageUrl} alt="Uploaded image" width={200} height={100} />
+          <Image src={imageUrl} alt="Uploaded image" width={300} height={100} />
         </div>
-        <div className="flex flex-col">
-          <h1>This is the image you have selected.</h1>
-          <div className="grid grid-cols-2 grid-rows-2">
+        <div className="flex flex-col justify-between">
+          <div className="grid grid-cols-2 grid-rows-2 gap-3">
             <PrimaryButton
               onClick={onContinueClicked}
               className="row-start-1 row-end-2 col-start-1 col-end-3"
             >
               Continue
             </PrimaryButton>
-            <PrimaryButton
+            <DangerButton
               onClick={onCancelClicked}
               className="row-start-2 row-end-3 col-start-1 col-end-2"
             >
               Cancel
-            </PrimaryButton>
-            <PrimaryButton
+            </DangerButton>
+            <NeutralButton
               onClick={onReUploadClicked}
               className="row-start-2 row-end-3 col-start-2 col-end-3"
             >
               Re-upload
-            </PrimaryButton>
+            </NeutralButton>
           </div>
         </div>
       </div>

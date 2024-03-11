@@ -18,10 +18,20 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const response = await fetch(process.env.SEGMENTATION_MODEL_SERVER!, {
+    let response;
+
+    response = await fetch(process.env.SEGMENTATION_MODEL_SERVER!, {
       body: formData,
       method: "POST",
     });
+
+    // retry on timeout error
+    if (response.status == 504) {
+      response = await fetch(process.env.SEGMENTATION_MODEL_SERVER!, {
+        body: formData,
+        method: "POST",
+      });
+    }
 
     if (!response.ok) {
       throw new Error(

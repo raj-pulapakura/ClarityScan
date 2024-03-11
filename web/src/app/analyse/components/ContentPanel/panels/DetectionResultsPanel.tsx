@@ -1,8 +1,7 @@
 import React from "react";
-import Panel from "../containers/Panel";
+import Panel from "../../../../../shared/panel/Panel";
 import { useTumorDetectionResultsStore } from "@/state/TumorDetectionResults/store";
-import ImageItem from "../../containers/ImageItem";
-import DetectionResultItem from "../containers/DetectionResultItem";
+import ImageItemHorizontal from "../../containers/ImageItemHorizontal";
 
 export default function DetectionResultsPanel() {
   const inputDataItem = useTumorDetectionResultsStore(
@@ -23,17 +22,17 @@ export default function DetectionResultsPanel() {
   return (
     <Panel title="Segmentation Results">
       {showContent ? (
-        <div className="grid grid-rows-1 grid-cols-3 gap-20 mt-10 w-full">
-          <DetectionResultItem
-            className="row-start-1 row-end-2 col-start-1 col-end-2 border-none"
+        <div className="grid grid-rows-3 grid-cols-1 md:grid-rows-1 md:grid-cols-3 gap-20 mt-10 w-full">
+          <ImageItemHorizontal
+            className="border-none"
             imageDataItem={inputDataItem}
           />
-          <DetectionResultItem
-            className="row-start-1 row-end-2 col-start-2 col-end-3 border-none"
+          <ImageItemHorizontal
+            className="border-none"
             imageDataItem={tumorMaskDataItem}
           />
-          <DetectionResultItem
-            className="row-start-1 row-end-2 col-start-3 col-end-4 border-none"
+          <ImageItemHorizontal
+            className="border-none"
             imageDataItem={tumorOverlayDataItem}
           />
         </div>

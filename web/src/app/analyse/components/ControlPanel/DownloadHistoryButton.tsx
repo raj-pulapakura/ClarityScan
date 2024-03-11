@@ -33,7 +33,7 @@ export default function DownloadHistoryButton() {
       disabled={!imageHistory.length}
       className="px-10"
     >
-      Download Image History
+      Download History
     </NeutralButton>
   );
 }

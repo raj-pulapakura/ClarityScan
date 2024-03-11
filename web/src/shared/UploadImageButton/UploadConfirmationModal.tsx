@@ -4,29 +4,40 @@ import React from "react";
 import Image from "next/image";
 import DangerButton from "@/shared/buttons/DangerButton";
 import NeutralButton from "@/shared/buttons/NeutralButton";
+import { Grid } from "react-loader-spinner";
 
 export type ConfirmationModalProps = ModalProps & {
   imageUrl: string;
   onContinueClicked: VoidFunction;
   onCancelClicked: VoidFunction;
   onReUploadClicked: VoidFunction;
+  loading: boolean;
 };
 
 export default function UploadConfirmationModal({
   onCancelClicked,
   onContinueClicked,
   onReUploadClicked,
+  loading,
   imageUrl,
   ...props
 }: ConfirmationModalProps) {
   return (
-    <Modal className="rounded-lg" {...props}>
-      <div className="flex gap-10 flex-col">
-        <div>
-          <Image src={imageUrl} alt="Uploaded image" width={300} height={100} />
-        </div>
-        <div className="flex flex-col justify-between">
-          <div className="grid grid-cols-2 grid-rows-2 gap-3">
+    <Modal className="rounded-lg w-10/12 md:w-fit" {...props}>
+      {loading ? (
+        <Grid width={50} height={50} color="black" />
+      ) : (
+        <div className="flex gap-10 flex-col items-center">
+          <h1 className="text-2xl font-bold">Upload Image</h1>
+          <div>
+            <Image
+              src={imageUrl}
+              alt="Uploaded image"
+              width={300}
+              height={100}
+            />
+          </div>
+          <div className="grid grid-cols-2 grid-rows-2 gap-3 w-full">
             <PrimaryButton
               onClick={onContinueClicked}
               className="row-start-1 row-end-2 col-start-1 col-end-3"
@@ -47,7 +58,7 @@ export default function UploadConfirmationModal({
             </NeutralButton>
           </div>
         </div>
-      </div>
+      )}
     </Modal>
   );
 }

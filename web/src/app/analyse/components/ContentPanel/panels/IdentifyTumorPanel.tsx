@@ -1,8 +1,8 @@
 import PrimaryButton from "@/shared/buttons/PrimaryButton";
 import React, { useState } from "react";
-import Panel from "../containers/Panel";
+import Panel from "../../../../../shared/panel/Panel";
 import { useTumorDetectionInputsState } from "@/state/TumorDetectionInputs/store";
-import ImageItem from "../../containers/ImageItem";
+import ImageItem from "../../containers/ImageItemVertical";
 import { useTumorDetectionResultsStore } from "@/state/TumorDetectionResults/store";
 import { ImageDataItem } from "@/state/types";
 import { v4 } from "uuid";
@@ -10,8 +10,8 @@ import { useImageHistoryStore } from "@/state/ImageHistory/store";
 import { extractFilesFromZipBlob } from "@/dataFetching/extractFilesFromZipBlob";
 import NoImagesToShow from "../../containers/NoImagesToShow";
 import AvailableImagesHeadline from "../../containers/AvailableImagesHeadline";
-import PanelInnerContainer from "../containers/PanelInnerContainer";
-import PanelActionContainer from "../containers/PanelActionContainer";
+import PanelInnerContainer from "../../../../../shared/panel/PanelInnerContainer";
+import PanelActionContainer from "../../../../../shared/panel/PanelActionContainer";
 
 export default function IdentifyTumorPanel() {
   const tumorDetectionInputs = useTumorDetectionInputsState(
@@ -109,9 +109,9 @@ export default function IdentifyTumorPanel() {
           </PrimaryButton>
         </PanelActionContainer>
         {tumorDetectionInputs.length ? (
-          <div className="flex flex-col w-3/4">
+          <div className="flex flex-col w-full md:w-3/4">
             <AvailableImagesHeadline />
-            <div className="grid grid-cols-2 gap-5 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
               {tumorDetectionInputs.map((dataItem, index) => (
                 <ImageItem
                   key={dataItem.id}

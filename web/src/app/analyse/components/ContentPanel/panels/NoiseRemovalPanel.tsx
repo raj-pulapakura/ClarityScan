@@ -1,17 +1,17 @@
 import PrimaryButton from "@/shared/buttons/PrimaryButton";
-import React, { useEffect, useState } from "react";
-import Panel from "../containers/Panel";
+import React, { useEffect, useRef, useState } from "react";
+import Panel from "../../../../../shared/panel/Panel";
 import { useNoiseRemovalInputsState } from "@/state/NoiseRemovalInputs/store";
 import { useImageHistoryStore } from "@/state/ImageHistory/store";
 import { useTumorDetectionInputsState } from "@/state/TumorDetectionInputs/store";
 import { ImageDataItem } from "@/state/types";
 import { v4 } from "uuid";
-import ImageItem from "../../containers/ImageItem";
+import ImageItem from "../../containers/ImageItemVertical";
 import { extractFilesFromZipBlob } from "@/dataFetching/extractFilesFromZipBlob";
 import NoImagesToShow from "../../containers/NoImagesToShow";
 import AvailableImagesHeadline from "../../containers/AvailableImagesHeadline";
-import PanelInnerContainer from "../containers/PanelInnerContainer";
-import PanelActionContainer from "../containers/PanelActionContainer";
+import PanelInnerContainer from "../../../../../shared/panel/PanelInnerContainer";
+import PanelActionContainer from "../../../../../shared/panel/PanelActionContainer";
 
 export default function NoiseRemovalAction() {
   const noiseRemovalInputs = useNoiseRemovalInputsState(
@@ -30,6 +30,7 @@ export default function NoiseRemovalAction() {
     (state) => state.addTumorDetectionInput
   );
   const [loading, setLoading] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const getDenoisedImageFile = async () => {
     const formData = new FormData();
@@ -84,6 +85,7 @@ export default function NoiseRemovalAction() {
             potentially increase the accuracy of the glioma segmentation.
           </p>
           <PrimaryButton
+            ref={buttonRef}
             disabled={!noiseRemovalInputs.length}
             onClick={onRemovedNoiseButtonClicked}
             loading={loading}
@@ -92,9 +94,9 @@ export default function NoiseRemovalAction() {
           </PrimaryButton>
         </PanelActionContainer>
         {noiseRemovalInputs.length ? (
-          <div className="flex flex-col w-3/4">
+          <div className="flex flex-col w-full md:w-3/4">
             <AvailableImagesHeadline />
-            <div className="grid grid-cols-2 gap-5 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
               {noiseRemovalInputs.map((dataItem, index) => (
                 <ImageItem
                   key={dataItem.id}

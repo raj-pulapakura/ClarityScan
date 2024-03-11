@@ -1,5 +1,5 @@
 import Separator from "@/shared/containers/Separator";
-import Chevron from "@/shared/icons/Chevron";
+import Chevron from "@/shared/ui/Chevron";
 import React, { ReactNode, useState } from "react";
 import { Grid } from "react-loader-spinner";
 
@@ -15,7 +15,7 @@ export default function Panel({
   const [panelIsActive, setPanelIsActive] = useState(true);
 
   return (
-    <div className="w-full ">
+    <div className="w-full">
       <div
         className="relative hover:cursor-pointer"
         onClick={() => setPanelIsActive(!panelIsActive)}

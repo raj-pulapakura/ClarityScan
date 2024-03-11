@@ -24,6 +24,7 @@ export default function UploadImageButton({
     file: undefined,
     fileUrl: undefined,
   });
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const addImageHistoryItem = useImageHistoryStore(
@@ -56,6 +57,7 @@ export default function UploadImageButton({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.files && event.target.files[0]) {
+      setLoading(true);
       const file = event.target.files[0];
       const newFileState = {
         file,
@@ -64,6 +66,7 @@ export default function UploadImageButton({
       setFileState(newFileState);
       setShowModal(true);
       await convertImageToJpg(newFileState);
+      setLoading(false);
     }
   };
 
@@ -112,6 +115,7 @@ export default function UploadImageButton({
       </PrimaryButton>
       {showModal && fileState.file && fileState.fileUrl && (
         <UploadConfirmationModal
+          loading={loading}
           closeModal={resetState}
           onCancelClicked={resetState}
           onContinueClicked={() => {

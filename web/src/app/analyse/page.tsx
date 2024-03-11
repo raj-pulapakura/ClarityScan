@@ -7,11 +7,15 @@ import ControlPanel from "./components/ControlPanel/ControlPanel";
 
 export default function AnalysePage() {
   return (
-    <div className="mt-16 w-3/4 mx-auto">
+    <div className="w-full md:5/6 lg:4/5 2xl:w-3/4 mx-auto">
       <ControlPanel />
-      <div className=" flex flex-row gap-16 mt-20 mb-20">
-        <ImageHistory className="w-1/4" />
-        <ContentView className="w-3/4" />
+      <div className=" flex flex-col md:flex-row gap-16 mt-20 mb-20">
+        <div className="w-full md:w-1/4">
+          <ImageHistory />
+        </div>
+        <div className="w-full md:w-3/4">
+          <ContentView />
+        </div>
       </div>
     </div>
   );

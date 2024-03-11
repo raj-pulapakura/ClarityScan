@@ -1,7 +1,7 @@
 import { ImageDataItem } from "@/state/types";
 import React from "react";
 
-export default function DetectionResultItem({
+export default function ImageItemHorizontal({
   imageDataItem,
   className,
   ...props

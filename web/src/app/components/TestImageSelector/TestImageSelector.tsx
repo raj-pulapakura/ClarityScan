@@ -48,8 +48,10 @@ export default function TestImageSelector() {
   };
 
   return (
-    <div className="flex flex-col gap-10 border-gray-500 bg-gray-400 bg-opacity-10  border-2 rounded-lg items-center p-7">
-      <h1 className="text-xl font-semibold">Try a sample scan</h1>
+    <div className="flex flex-col gap-10 border-gray-500 bg-gray-400 bg-opacity-50  border-2 rounded-lg items-center p-7">
+      <h1 className="text-xl text-left self-start font-semibold">
+        Try a sample scan
+      </h1>
       <div className="flex flex-row gap-5">
         {samplePaths.map((src, index) => (
           <TestImage

@@ -13,8 +13,10 @@ export default function TestImage({
     <img
       onClick={onClick}
       className={`${
-        selected ? "outline outline-8 outline-gray-500 rounded-lg" : ""
-      } hover:cursor-pointer hover:outline hover:outline-8 hover:outline-gray-500 hover:rounded-lg`}
+        selected
+          ? "outline outline-8 outline-blue-500 rounded-lg"
+          : "hover:outline-8 hover:outline-blue-300 hover:rounded-lg"
+      } hover:cursor-pointer hover:outline `}
       src={src}
     />
   );

@@ -44,11 +44,14 @@ export default function NoiseRemovalAction() {
       body: formData,
     });
     if (response.status == 504) {
-      console.log("error, retrying");
-      response = await fetch("/api/denoisingModelService", {
-        method: "POST",
-        body: formData,
-      });
+      const timeout = 10 * 1000;
+      console.log(`error, retrying in ${timeout} ms`);
+      setTimeout(async () => {
+        response = await fetch("/api/denoisingModelService", {
+          method: "POST",
+          body: formData,
+        });
+      }, timeout);
     }
     const zipBlob = await response.blob();
     const predictionFiles = await extractFilesFromZipBlob(zipBlob);

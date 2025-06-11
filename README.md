@@ -8,6 +8,12 @@ ClarityScan is currently powered by two deep learning models:
 - Noise Removal Model: removes static noise from an MRI scan
 - Tumor Segmentation Model: identifies exactly where the glioma tumor is in the scan
 
+## Project demo
+
+Although the site has now been closed, I recorded a demo and uploaded it to [YouTube](https://youtu.be/v9OmIxve9Zs?si=TNJEbiRECqF7GHxn). Have a watch!
+
+![Screenshot 2025-06-11 204857](https://github.com/user-attachments/assets/04bf6ec8-9a22-450d-9f7d-b6ac717ef7cd)
+
 ## 📚 Project Resources
 
 Check out ClarityScan:
